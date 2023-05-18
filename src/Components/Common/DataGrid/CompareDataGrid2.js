@@ -40,7 +40,7 @@ export default function CompareDataGrid2({
     if (columnSettings?.title[columnSettings?.title?.length - 1] == 1)
       td.style.textAlign = "left";
     else if (columnSettings?.title[columnSettings?.title?.length - 1] == 2)
-      td.style.textAlign = "end";
+      td.style.textAlign = "left";
 
     if (rowData) {
       let row = data?.filter((row) => row?.rowNo === rowData[0])[0];
