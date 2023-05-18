@@ -38,7 +38,7 @@ export default function CompareDataGrid2({
     const rowData = instance.getSourceDataAtRow(row);
     const columnSettings = instance.getSettings().columns[col];
     if (columnSettings?.title[columnSettings?.title?.length - 1] == 1)
-      td.style.textAlign = "left";
+      td.style.textAlign = "end";
     else if (columnSettings?.title[columnSettings?.title?.length - 1] == 2)
       td.style.textAlign = "left";
 
