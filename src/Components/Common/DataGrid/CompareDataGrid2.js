@@ -1,12 +1,12 @@
-import React, { useRef, useState } from "react";
 import { HotTable } from "@handsontable/react";
-import { registerAllModules } from "handsontable/registry";
 import "handsontable/dist/handsontable.full.min.css";
+import { registerAllModules } from "handsontable/registry";
 import { textRenderer } from "handsontable/renderers";
-import MyPagination from "../../Pagination/Pagination";
+import React, { useRef, useState } from "react";
 import { Paginate } from "../../Pagination/Paginate";
-import GridTopBar from "./GridTopBar";
+import MyPagination from "../../Pagination/Pagination";
 import DataGridConfg from "./Dialogs/DataGridConfg";
+import GridTopBar from "./GridTopBar";
 
 registerAllModules();
 export default function CompareDataGrid2({
@@ -72,6 +72,7 @@ export default function CompareDataGrid2({
 
     td.innerText = value;
   }
+  
   let exportCSV = () => {
     const hotInstance = hotTableRef.current.hotInstance;
     hotInstance.getPlugin("exportFile").downloadFile("csv", {
