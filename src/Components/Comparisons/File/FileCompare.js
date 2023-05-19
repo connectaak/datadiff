@@ -1,13 +1,13 @@
 import { CheckCircle, FileUpload, PlayArrow } from "@mui/icons-material";
-import { Grid, Box, Button, Typography, IconButton } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { Box, Button, Grid, IconButton, Typography } from "@mui/material";
 import Papa from "papaparse";
+import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { Comparator } from "../../Common/Comparator";
 import CompareDataGrid2 from "../../Common/DataGrid/CompareDataGrid2";
+import { DataFilter } from "../../Functions/DataFilter";
 import { DataFormatter } from "../../Functions/DataFormatter";
 import { RowFormatter } from "../../Functions/RowFormatter";
-import { DataFilter } from "../../Functions/DataFilter";
 
 export default function FileCompare({ tabID }) {
   const [rowsL, setRowsL] = useState([]);
@@ -20,6 +20,8 @@ export default function FileCompare({ tabID }) {
 
   const [uploadingL, setUploadingL] = useState(false);
   const [uploadingR, setUploadingR] = useState(false);
+
+  const [filter, setFilter] = useState("");
 
   const allowedExtensions = ["csv"];
 
@@ -99,11 +101,10 @@ export default function FileCompare({ tabID }) {
     DataFormatter(result?.rows, setCustomData, setColumns, dataTypes);
   };
 
-  const [filter, setFilter] = useState("");
-
+  if (filter !== "") DataFilter(customData,setCustomData,columns,setColumns, filter);
   let allRows = RowFormatter(customData);
 
-  if (filter !== "") allRows = DataFilter(allRows, filter);
+  
 
   return (
     <div>
