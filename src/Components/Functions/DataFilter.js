@@ -23,6 +23,8 @@ uniqueArray.unshift({title: 'rowNo', type: 'numeric'})
 setCustomData(filteredData)
 
 switch (filter) {
+  case "all":
+    return setColumns(columns);
   case "different":
     return setColumns(uniqueArray);
   default:
