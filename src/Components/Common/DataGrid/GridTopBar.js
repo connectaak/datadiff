@@ -26,10 +26,10 @@ export default function GridTopBar({
         <div style={{ display: "flex", gap: "0.5rem", flex: "1" }}>
           <Tooltip title=" All Rows">
             <IconButton
-              onClick={() => setFilter("")}
+              onClick={() => setFilter("all")}
               color={filter === "" ? "warning" : "info"}
             >
-              <TableRows sx={{ color: filter === "" ? "yellow" : "white" }} />
+              <TableRows sx={{ color: filter === "all" ? "yellow" : "white" }} />
             </IconButton>
           </Tooltip>{" "}
           <Tooltip title="Only in Data 1">
@@ -40,9 +40,9 @@ export default function GridTopBar({
             </IconButton>
           </Tooltip>
           <Tooltip title=" Not Matched ">
-            <IconButton onClick={() => setFilter("_different")}>
+            <IconButton onClick={() => setFilter("different")}>
               <GridOff
-                sx={{ color: filter === "_different" ? "yellow" : "white" }}
+                sx={{ color: filter === "different" ? "yellow" : "white" }}
               />
             </IconButton>
           </Tooltip>

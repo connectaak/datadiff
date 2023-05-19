@@ -1,13 +1,13 @@
 import { CheckCircle, FileUpload, PlayArrow } from "@mui/icons-material";
-import { Grid, Box, Button, Typography, IconButton } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { Box, Button, Grid, IconButton, Typography } from "@mui/material";
 import Papa from "papaparse";
+import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { Comparator } from "../../Common/Comparator";
 import CompareDataGrid2 from "../../Common/DataGrid/CompareDataGrid2";
+import { DataFilter } from "../../Functions/DataFilter";
 import { DataFormatter } from "../../Functions/DataFormatter";
 import { RowFormatter } from "../../Functions/RowFormatter";
-import { DataFilter } from "../../Functions/DataFilter";
 
 export default function FileCompare({ tabID }) {
   const [rowsL, setRowsL] = useState([]);
@@ -15,11 +15,14 @@ export default function FileCompare({ tabID }) {
   const [customData, setCustomData] = useState([]);
   const [columns, setColumns] = useState([]);
 
+
   const [nameL, setNameL] = useState(false);
   const [nameR, setNameR] = useState(false);
 
   const [uploadingL, setUploadingL] = useState(false);
   const [uploadingR, setUploadingR] = useState(false);
+
+  const [filter, setFilter] = useState("");
 
   const allowedExtensions = ["csv"];
 
@@ -37,7 +40,6 @@ export default function FileCompare({ tabID }) {
   const handleFileChange = (e) => {
     if (e.target.files.length) {
       const name = e.target.name;
-      console.log(name);
       const inputFile = e.target.files[0];
       const fileExtension = inputFile?.type.split("/")[1];
       if (!allowedExtensions.includes(fileExtension)) {
@@ -51,7 +53,6 @@ export default function FileCompare({ tabID }) {
       const reader = new FileReader();
       reader.onload = async ({ target }) => {
         const csv = Papa.parse(target.result, { header: true });
-        console.log(csv.data);
         if (name === "left") {
           const rows = csv?.data;
           const headers = Object.keys(rows[0]);
@@ -65,7 +66,6 @@ export default function FileCompare({ tabID }) {
             }
             data.push(obj);
           }
-          console.log(data);
           setRowsL(data);
           setNameL(inputFile.name);
           setUploadingL(true);
@@ -82,7 +82,6 @@ export default function FileCompare({ tabID }) {
             }
             data.push(obj);
           }
-          console.log(data);
 
           setRowsR(data);
           setNameR(inputFile.name);
@@ -96,14 +95,26 @@ export default function FileCompare({ tabID }) {
 
   const handleCompare = () => {
     let result = Comparator(rowsL, rowsR);
-    DataFormatter(result?.rows, setCustomData, setColumns, dataTypes);
+    const {data,
+    allCols}=DataFormatter(result?.rows,dataTypes);
+
+    setColumns(allCols)
+    setCustomData(data)
+    
   };
 
-  const [filter, setFilter] = useState("");
-
+ useEffect(()=>{
+ 
+  if (filter !== "") {
+    let result = Comparator(rowsL, rowsR);
+    const {data,
+      allCols}=DataFormatter(result?.rows,dataTypes);
+  
+    DataFilter(data,setCustomData,allCols,setColumns, filter)
+  };
+ },[ filter])
   let allRows = RowFormatter(customData);
 
-  if (filter !== "") allRows = DataFilter(allRows, filter);
 
   return (
     <div>

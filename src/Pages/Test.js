@@ -1,6 +1,6 @@
-import React, { useState } from "react";
 import Handsontable from "handsontable";
 import Papa from "papaparse";
+import React, { useState } from "react";
 
 export default function CompareData() {
   const [comparisonResult, setComparisonResult] = useState(null);
@@ -68,7 +68,6 @@ export default function CompareData() {
     setComparisonResult({ columnNames, rows });
   };
   compareData();
-  console.log(comparisonResult);
   const renderTable = () => {
     if (comparisonResult === null) {
       return null;

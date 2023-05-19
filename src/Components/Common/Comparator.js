@@ -1,6 +1,4 @@
 const Comparator = (data1, data2) => {
-  console.log(data1);
-  console.log(data2);
   if (data1.length === 0 || data2.length === 0) {
     alert("Please provide both sets of data");
     return;
@@ -58,3 +56,4 @@ const Comparator = (data1, data2) => {
   return { columnNames, rows };
 };
 export { Comparator };
+
