@@ -1,4 +1,5 @@
 let RowFormatter = (data) => {
+
   let allRows = [];
   for (const row of data) {
     let singleRow = {};
@@ -26,3 +27,4 @@ let RowFormatter = (data) => {
 };
 
 export { RowFormatter };
+

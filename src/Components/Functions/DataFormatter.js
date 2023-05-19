@@ -1,4 +1,4 @@
-let DataFormatter = (data, setData, setColumns, dataTypes) => {
+export const DataFormatter = (data, dataTypes) => {
   if (data[0]?.rows?.length > 0) {
     // setLastRefreshed(new Date().toLocaleTimeString());
     let cols = data[0].rows?.map((col) => {
@@ -19,9 +19,11 @@ let DataFormatter = (data, setData, setColumns, dataTypes) => {
       allCols.push(col[0]);
     }
 
-    setData(data);
-    setColumns(allCols);
+return{data,
+  allCols}
+
   } else alert("No Columns Found");
 };
 
-export { DataFormatter };
+
+
