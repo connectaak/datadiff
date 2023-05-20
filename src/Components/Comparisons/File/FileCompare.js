@@ -26,6 +26,94 @@ export default function FileCompare({ tabID }) {
 
   const allowedExtensions = ["csv"];
 
+  const [draggingL, setDraggingL] = useState(false);
+  const [draggingR, setDraggingR] = useState(false);
+ 
+
+  const handleDragEnter = (e,name) => {
+    e.preventDefault();
+    e.stopPropagation(); 
+    if(name==="left"){
+      setDraggingL(true);
+    }else{
+      setDraggingR(true);
+    }
+    
+  };
+
+  const handleDragLeave = (e,name) => {
+    e.preventDefault();
+    if(name==="left"){
+      setDraggingL(false);
+    }else{
+      setDraggingR(false);
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e,name) => {
+    e.preventDefault();
+    if(name==="left"){
+      setDraggingL(false);
+    }else{
+      setDraggingR(false);
+    }
+    
+  const droppedFiles = e.dataTransfer.files;
+  const inputFile = droppedFiles[0];
+ 
+  const fileExtension = inputFile?.type.split("/")[1];
+  if (!allowedExtensions.includes(fileExtension)) {
+    Swal.fire(
+      "Error!",
+      "Mismatch File Type. Please upload .csv File only",
+      "error"
+    );
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = async ({ target }) => {
+    const csv = Papa.parse(target.result, { header: true });
+    if (name === "left") {
+      const rows = csv?.data;
+      const headers = Object.keys(rows[0]);
+      const data = [];
+
+      for (const element of rows) {
+        const row = Object.values(element);
+        const obj = {};
+        for (let j = 0; j < headers.length; j++) {
+          obj[headers[j]] = row[j];
+        }
+        data.push(obj);
+      }
+      setRowsL(data);
+      setNameL(inputFile.name);
+      setUploadingL(true);
+    } else if (name === "right") {
+      const rows = csv?.data;
+      const headers = Object.keys(rows[0]);
+      const data = [];
+
+      for (const element of rows) {
+        const row = Object.values(element);
+        const obj = {};
+        for (let j = 0; j < headers.length; j++) {
+          obj[headers[j]] = row[j];
+        }
+        data.push(obj);
+      }
+
+      setRowsR(data);
+      setNameR(inputFile.name);
+      setUploadingR(true);
+    }
+  };
+  reader.readAsText(inputFile);
+  };
   useEffect(() => {
     setColumns([]);
     setCustomData([]);
@@ -120,8 +208,26 @@ export default function FileCompare({ tabID }) {
     <div>
       <Grid container display={"flex"} flexWrap="wrap">
         <Grid md={6} xs={12} item>
-          <Box padding={"10px"} display="flex" alignItems={"center"}>
+          <Box sx={{background:draggingL&&"gray",width:'400px',height:"400px"}} padding={"10px"} display="flex" alignItems={"center"} justifyContent={"center"}
+                onDragEnter={(e)=>handleDragEnter(e,"left")}
+                onDragLeave={(e)=>handleDragLeave(e,"left")}
+                onDragOver={handleDragOver}
+                onDrop={(e)=>handleDrop(e,"left")}
+          
+          >
             <Box>
+            {uploadingL ? (
+        <Box>
+          <Typography align={"center"}>Uploaded The First File</Typography>
+        </Box>
+      ) : (
+        <>
+           <Typography align={"center"}>Drag and drop the first file here</Typography>
+           <Typography align={"center"}>Or</Typography>
+        </>
+     
+      )}
+
               <label htmlFor="upload-file1">
                 <input
                   style={{ display: "none" }}
@@ -154,8 +260,24 @@ export default function FileCompare({ tabID }) {
         </Grid>{" "}
         <Grid md={6} xs={12} item display={"flex"} justifyContent="end">
           <Box>
-            <Box padding={"10px"} display="flex" alignItems={"center"}>
+            <Box sx={{background:draggingR&&"gray",width:'400px',height:"400px"}} padding={"10px"} display="flex" alignItems={"center"} justifyContent={"center"}
+              onDragOver={handleDragOver}
+              onDragEnter={(e)=>handleDragEnter(e,"right")}
+                onDragLeave={(e)=>handleDragLeave(e,"right")}
+                
+                onDrop={(e)=>handleDrop(e,"right")}>
               <Box>
+              {uploadingR ? (
+        <Box>
+          <Typography align={"center"}>Uploaded The Second File</Typography>
+        </Box>
+      ) : (
+        <>
+           <Typography align={"center"}>Drag and drop the first file here</Typography>
+           <Typography align={"center"}>Or</Typography>
+        </>
+     
+      )}
                 <label htmlFor="upload-file2">
                   <input
                     style={{ display: "none" }}

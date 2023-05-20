@@ -1,12 +1,10 @@
 import {
   FileDownload,
   GridOff,
-  JoinLeft,
-  JoinRight,
   RotateLeftSharp,
   Save,
   Settings,
-  TableRows,
+  TableRows
 } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 import React from "react";
@@ -32,13 +30,13 @@ export default function GridTopBar({
               <TableRows sx={{ color: filter === "all" ? "yellow" : "white" }} />
             </IconButton>
           </Tooltip>{" "}
-          <Tooltip title="Only in Data 1">
+          {/* <Tooltip title="Only in Data 1">
             <IconButton onClick={() => setFilter("_onlyInDb1")}>
               <JoinLeft
                 sx={{ color: filter === "_onlyInDb1" ? "yellow" : "white" }}
               />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
           <Tooltip title=" Not Matched ">
             <IconButton onClick={() => setFilter("different")}>
               <GridOff
@@ -46,13 +44,13 @@ export default function GridTopBar({
               />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Only in Data 2">
+          {/* <Tooltip title="Only in Data 2">
             <IconButton onClick={() => setFilter("_onlyInDb2")}>
               <JoinRight
                 sx={{ color: filter === "_onlyInDb2" ? "yellow" : "white" }}
               />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
         </div>
         <div className="d-flex align-items-center">
           <Tooltip title="Reset Grid">
