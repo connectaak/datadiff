@@ -6,7 +6,8 @@ let RowFormatter = (data) => {
     for (const col of row?.rows) {
       let col1 = col?.columnName;
       let col2 = col?.columnName;
-      singleRow["rowNo"] = col?.rowNo;
+      singleRow["id"] = col?.id;
+      // singleRow["rowNo"] = col?.rowNo;
       singleRow[col1] = col?.columnValue;
       singleRow[col2] = col?.columnValue;
       singleRow[col1 + "_different"] = col?.different;

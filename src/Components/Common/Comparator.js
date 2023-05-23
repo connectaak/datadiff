@@ -23,7 +23,8 @@ const Comparator = (data1, data2) => {
       // Compare column values and log differences
       const different = columnValue !== column2Value;
       row.rows.push({
-        rowNo: i + 1,
+        id:i+1,
+        // rowNo: i + 1,
         colNo: columnNames.indexOf(`${columnName}_db1`) + 1,
         columnName: `${columnName}_db1`,
         columnValue,
@@ -36,7 +37,8 @@ const Comparator = (data1, data2) => {
         onlyInDb2: false,
       });
       row.rows.push({
-        rowNo: i + 1,
+        id:i+1,
+        // rowNo: i + 1,
         colNo: columnNames.indexOf(`${columnName}_db2`) + 1,
         columnName: `${columnName}_db2`,
         columnValue: column2Value,

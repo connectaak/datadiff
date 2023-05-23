@@ -1,4 +1,4 @@
-import * as React from "react";
+import MenuIcon from "@mui/icons-material/Menu";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -9,16 +9,12 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { Tooltip } from "@mui/material";
+import * as React from "react";
+// import { Tooltip } from "@mui/material";
 import {
-  InsertDriveFile,
   Menu,
-  Storage,
-  TableRows,
-  TextFields, 
 } from "@mui/icons-material";
 import TabsDrawer from "../../Comparisons/TabsDrawer";
 
@@ -79,7 +75,7 @@ function Header(props) {
           >
             Compare-X
           </Typography>
-          <Box  display={'flex'} justifyContent="end">
+          {/* <Box  display={'flex'} justifyContent="end">
            <Box>
              <Tooltip title="View Tabs">
               <IconButton onClick={handleTabsDrawerToggle}  sx={{display:{lg:"none"}}}>
@@ -111,7 +107,7 @@ function Header(props) {
               </IconButton>
             </Tooltip>
            </Box>
-          </Box>
+          </Box> */}
         </Toolbar>
       </AppBar>
       <Box component="nav">
