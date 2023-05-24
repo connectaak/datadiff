@@ -35,7 +35,7 @@ function Header(props) {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        <Menu /> Compare-X
+        <Menu /> DiffX
       </Typography>
       <Divider />
       <List>
@@ -56,7 +56,7 @@ function Header(props) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar component="nav" className="bg-dark">
+      <AppBar component="nav" className="bg-green">
         <Toolbar>
           <IconButton
             color="inherit"
@@ -73,7 +73,7 @@ function Header(props) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            Compare-X
+           DiffX
           </Typography>
           {/* <Box  display={'flex'} justifyContent="end">
            <Box>

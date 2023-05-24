@@ -1,9 +1,11 @@
 import {
   GridOff,
+  Save,
   TableRows
 } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 import React from "react";
+// import CustomToolbar from "../CustomToolbar";
 
 export default function GridTopBar({
   filter,
@@ -13,7 +15,14 @@ export default function GridTopBar({
   onExcelExport,
   resetFilterSortConfig,
   isDBData,
+  apiRef
 }) {
+
+
+  const handleExport= () => {
+    const gridApi = apiRef.current;
+    gridApi.exportDataAsCsv({ delimiter: ";", utf8WithBom: true });
+  };
   return (
     <div className="bg-success mt-3">
       <div className="d-flex ">
@@ -48,8 +57,17 @@ export default function GridTopBar({
             </IconButton>
           </Tooltip> */}
         </div>
-        {/* <div className="d-flex align-items-center">
-          <Tooltip title="Reset Grid">
+        <div className="d-flex align-items-center">
+        <Tooltip title="Export in Excel">
+                <IconButton  onClick={handleExport}>
+                  <Save sx={{ color: "white" }} />
+                </IconButton>
+        </Tooltip>
+        {/* <CustomToolbar/> */}
+        {/* <Tooltip title="Reset Grid"> */}
+           {/* <CustomToolbar/> */}
+          {/* </Tooltip> */}
+          {/* <Tooltip title="Reset Grid">
             <IconButton onClick={resetFilterSortConfig}>
               <RotateLeftSharp sx={{ color: "white" }} />
             </IconButton>
@@ -70,8 +88,8 @@ export default function GridTopBar({
             <IconButton onClick={() => onExport()}>
               <FileDownload sx={{ color: "white" }} />
             </IconButton>
-          </Tooltip>
-        </div> */}
+          </Tooltip> */}
+        </div>
       </div>
     </div>
   );
