@@ -1,15 +1,11 @@
-import { HotTable } from "@handsontable/react";
-import "handsontable/dist/handsontable.full.min.css";
-import { registerAllModules } from "handsontable/registry";
-import { textRenderer } from "handsontable/renderers";
-import React, { useRef, useState } from "react";
-import { Paginate } from "../../Pagination/Paginate";
-import MyPagination from "../../Pagination/Pagination";
-import DataGridConfg from "./Dialogs/DataGridConfg";
+import { Typography } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import React from "react";
+import CustomToolbar from "../CustomToolbar";
 import GridTopBar from "./GridTopBar";
 
-registerAllModules();
-export default function CompareDataGrid2({
+
+export default function CompareDataGrid({
   columns,
   data,
   setFilter,
@@ -18,136 +14,147 @@ export default function CompareDataGrid2({
   onExcelExport,
   isDBData = false,
 }) {
-  let hotTableRef = useRef(null);
-  const [currentPage, setCurrentPage] = useState(1);
+ 
+
+
+
   let parsedData = data?.map((row, i) => {
-    let singleRow = [];
+    let singleRow = {};
     for (const col of columns) {
-      singleRow.push(row[col.title]);
+     
+      singleRow[col?.title] = row[col?.title];
     }
-    return singleRow;
-  });
-  // bdffd1
-  const [openConfgis, setOpenConfig] = useState(false);
-  const [configurations, setConfigurations] = useState({
-    diffColor: "#ebf5b7",
-    noOfRowsPerPage: 20,
-  });
-  function RowRenderer(instance, td, row, col, prop, value, cellProperties) {
-    textRenderer.apply(this, arguments);
-    const rowData = instance.getSourceDataAtRow(row);
-    const columnSettings = instance.getSettings().columns[col];
-    if (columnSettings?.title[columnSettings?.title?.length - 1] == 1)
-      td.style.textAlign = "end";
-    else if (columnSettings?.title[columnSettings?.title?.length - 1] == 2)
-      td.style.textAlign = "left";
 
-    if (rowData) {
-      let row = data?.filter((row) => row?.rowNo === rowData[0])[0];
-
-      if (columnSettings?.title[columnSettings?.title?.length - 1] === "1") {
-        if (
-          row[columnSettings?.title + "_different"] ||
-          row[columnSettings?.title + "_onlyInDb1"]
-        )
-          td.style.background = configurations.diffColor;
-        else if (row[columnSettings?.title + "_nullInBoth"]) {
-          td.style.background = "#d1d1d1";
-        }
-      } else if (
-        columnSettings?.title[columnSettings?.title?.length - 1] === "2"
-      ) {
-        if (
-          row[columnSettings?.title + "_different"] ||
-          row[columnSettings?.title + "_onlyInDb2"]
-        )
-          td.style.background = configurations.diffColor;
-        else if (row[columnSettings?.title + "_nullInBoth"]) {
-          td.style.background = "#d1d1d1";
-        }
-      }
+    singleRow.id=i+1;
+    let hasMatched = false;
+    const keys = Object.keys(row);
+// Iterate over the keys
+for (const key of keys) {
+  // Check if the key contains '_different' and its value is true
+  if (key.endsWith('_different') ) {
+    if( row[key] === true){
+      hasMatched=true;
+      break;
     }
-    td.style.borderBottom = "1px solid #4a4a4a";
-    td.style.borderRight = "1px solid #4a4a4a";
-
-    td.innerText = value;
+   
   }
+}
+if (hasMatched) {
+  singleRow.status="Not_Matched";
+} else {
+  singleRow.status="Matched";
+}
+    return singleRow;
+  })
+
+
+  const csvOptions = {
+    fieldSeparator: ",",
+    quoteStrings: '"',
+    decimalSeparator: ".",
+    showLabels: true,
+    useBom: true,
+    title: "ComparisonRows",
+    useKeysAsHeaders: false,
+    headers: columns.map((c) => c.header),
+  };
+ 
   
-  let exportCSV = () => {
-    const hotInstance = hotTableRef.current.hotInstance;
-    hotInstance.getPlugin("exportFile").downloadFile("csv", {
-      bom: true,
-      columnDelimiter: ",",
-      columnHeaders: true,
-      exportHiddenColumns: true,
-      exportHiddenRows: true,
-      fileExtension: "csv",
-      filename: "compare-data",
-      mimeType: "text/csv",
-      rowDelimiter: "\r\n",
-      rowHeaders: true,
-    });
-  };
-
-  let items = Paginate(parsedData, currentPage, configurations.noOfRowsPerPage);
-
-  const resetFilterSortConfig = () => {
-    if (hotTableRef.current) {
-      hotTableRef.current.hotInstance.loadData(items);
-      hotTableRef.current.hotInstance.updateSettings({
-        columns: columns,
-      });
-    }
-  };
   return (
-    <div>
-      <GridTopBar
-        onExport={exportCSV}
-        filter={filter}
-        setFilter={setFilter}
-        onOpenConfig={() => setOpenConfig(true)}
-        onExcelExport={onExcelExport}
-        isDBData={isDBData}
-        resetFilterSortConfig={resetFilterSortConfig}
-      />
-      <HotTable
-        ref={hotTableRef}
-        data={items}
-        allowRemoveColumn={true}
-        stretchH="all"
+    <div style={{ height: 400, width: '100%' }}>
+       
+           <GridTopBar
+            onExport={csvOptions}
+            filter={filter}
+            setFilter={setFilter}
+            // onOpenConfig={() => setOpenConfig(true)}
+            onExcelExport={onExcelExport}
+            isDBData={isDBData}
+            // resetFilterSortConfig={resetFilterSortConfig}
+          />
+    {
+     Object.keys(parsedData[0]).length===1?
+      <Typography align="center">There is no any different data</Typography>
+      :
+<DataGrid
+        rows={parsedData}
         columns={columns}
-        height={height ? height : "48vh"}
-        rowHeights="25px"
-        customBorders={true}
-        dropdownMenu={true}
-        columnSorting={true}
-        // multiColumnSorting={true}
-        manualColumnMove
-        filters={true}
-        manualRowMove={true}
-        licenseKey="non-commercial-and-evaluation" // for non-commercial use only
-        cells={function (row, col) {
-          const cellProperties = {};
-          cellProperties.renderer = RowRenderer;
-          cellProperties.editor = "text";
-          cellProperties.readOnly = false;
-          return cellProperties;
+        minHeight={500}
+        disableSelectionOnClick
+        disableColumnMenu
+        autoHeight
+        columnBuffer={2}
+        density="compact"
+        showCellVerticalBorder
+        showColumnVerticalBorder
+        slots={{
+          toolbar: CustomToolbar,
+        }}
+        sx={{"& .MuiDataGrid-cell": {
+          border: 1,
+          borderRight: 0,
+          borderTop: 0,
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            border: 1,
+            borderLeft:1,
+          },
+          "& .MuiDataGrid-columnHeader": {
+            borderRight: 1,
+          },
+
+          '& .row-db1-different': {
+            backgroundColor: '#FFC7CE',
+            color: '#9C0006',
+            justifyContent:"flex-end"
+          },
+          '& .row-db2-different': {
+            backgroundColor: '#FFC7CE',
+            color: '#9C0006',
+            justifyContent:"flex-start"
+          },
+          '& .row-db1-not-different': {
+            backgroundColor: '#C6EFCE',
+            color: '#006100',
+            justifyContent:"flex-end"
+          },
+          '& .row-db2-not-different': {
+            backgroundColor: '#C6EFCE',
+            color: '#006100',
+            justifyContent:"flex-start"
+          },
+          '& .row-null-in-both': {
+            backgroundColor: 'green',
+            color: '#1a3e72',
+          },
+          
+        }}
+       
+        getCellClassName={ (params) => {
+          const col = params.field;
+  
+          const row = data.find((item) => item.id === params.id);
+          if (row){
+            if (col.endsWith("_db1")) {
+              if (row[col + "_different"] || row[col + "_onlyInDb1"]) {
+                return "row-db1-different";
+              }else {
+                return "row-db1-not-different";
+              }
+             
+            } else if (col.endsWith("_db2")) {
+              if (row[col + "_different"] || row[col + "_onlyInDb2"]) {
+                return "row-db2-different";
+              } else {
+                return "row-db2-not-different"; 
+              }
+            }
+          }
+          return "";
         }}
       />
-      {parsedData.length > 0 && (
-        <MyPagination
-          currentPage={currentPage}
-          itemsCount={parsedData.length}
-          pageSize={configurations.noOfRowsPerPage}
-          handleChange={(val) => setCurrentPage(val)}
-        />
-      )}
-      <DataGridConfg
-        open={openConfgis}
-        setOpen={setOpenConfig}
-        configs={configurations}
-        setConfigs={setConfigurations}
-      />
+  }   
+    
     </div>
   );
 }

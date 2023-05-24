@@ -1,12 +1,12 @@
 import { Grid } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import Layout from "../Components/Layout/Layout";
-import TabsDrawer from "../Components/Comparisons/TabsDrawer";
-import Comparison from "./Comparison";
 import Swal from "sweetalert2";
+import TabsDrawer from "../Components/Comparisons/TabsDrawer";
+import Layout from "../Components/Layout/Layout";
+import Comparison from "./Comparison";
 
 export default function Home() {
-  const [comparisonType, setComparisonType] = useState("api");
+  const [comparisonType, setComparisonType] = useState("file");
   const [tabs, setTabs] = useState([
     {
       title: "New Tab: 1",

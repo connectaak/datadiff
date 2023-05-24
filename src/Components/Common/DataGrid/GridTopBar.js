@@ -1,9 +1,5 @@
 import {
-  FileDownload,
   GridOff,
-  RotateLeftSharp,
-  Save,
-  Settings,
   TableRows
 } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
@@ -52,7 +48,7 @@ export default function GridTopBar({
             </IconButton>
           </Tooltip> */}
         </div>
-        <div className="d-flex align-items-center">
+        {/* <div className="d-flex align-items-center">
           <Tooltip title="Reset Grid">
             <IconButton onClick={resetFilterSortConfig}>
               <RotateLeftSharp sx={{ color: "white" }} />
@@ -75,7 +71,7 @@ export default function GridTopBar({
               <FileDownload sx={{ color: "white" }} />
             </IconButton>
           </Tooltip>
-        </div>
+        </div> */}
       </div>
     </div>
   );
