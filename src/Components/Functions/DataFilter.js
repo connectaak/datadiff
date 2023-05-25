@@ -15,15 +15,15 @@ let DataFilter = (customData,setCustomData,columns,setColumns, filter) => {
   });
 
   const columnNames = filteredData.flatMap((item) =>
-  item.rows.map((row) => ({ title: row.columnName,field:row.columnName, type: 'text', sortable: false,  }))
+  item.rows.map((row) => ({ title: row.columnName,field:row.columnName, type: 'text'  }))
 );
 const uniqueArray = Array.from(new Set(columnNames.map(obj => obj.title)))
   .map(title => columnNames.find(obj => obj.title === title));
 uniqueArray.unshift({
   title:"id",
 field:"id",
- type:"numeric",
-  sortable: false, 
+ type:"numeric"
+ 
  
 })
 setCustomData(filteredData)

@@ -13,7 +13,7 @@ export default function CompareDataGrid({
   isDBData = false,
 }) {
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(50);
   const apiRef = useGridApiRef();
 
   let parsedData = data?.map((row, i) => {
@@ -54,26 +54,12 @@ export default function CompareDataGrid({
     (page - 1) * pageSize,
     page * pageSize
   );
-
-  const csvOptions = {
-    fieldSeparator: ",",
-    quoteStrings: '"',
-    decimalSeparator: ".",
-    showLabels: true,
-    useBom: true,
-    title: "ComparisonRows",
-    useKeysAsHeaders: false,
-    headers: columns.map((c) => c.header),
-  };
-
-  return (
+return (
     <div style={{ height: 400, width: "100%", position: "relative" }}>
       <GridTopBar
-        onExport={csvOptions}
+       
         filter={filter}
         setFilter={setFilter}
-        onExcelExport={onExcelExport}
-        isDBData={isDBData}
         apiRef={apiRef}
       />
       {Object.keys(parsedData[0]).length === 1 ? (
@@ -85,7 +71,6 @@ export default function CompareDataGrid({
             columns={columns}
             minHeight={500}
             disableSelectionOnClick
-            disableColumnMenu
             autoHeight
             columnBuffer={2}
             density="compact"
@@ -126,9 +111,9 @@ export default function CompareDataGrid({
                 color: '#006100',
                 justifyContent: "flex-start"
               },
-              '& .row-null-in-both': {
-                backgroundColor: 'green',
-                color: '#1a3e72',
+              '& .null-cell': {
+                backgroundColor: '#FFEB9C',
+                color: '#9C6500',
               },
             }}
             getCellClassName={(params) => {
@@ -136,15 +121,20 @@ export default function CompareDataGrid({
               const row = data.find((item) => item.id === params.id);
               if (row) {
                 if (col.endsWith("_db1")) {
-                  if (row[col + "_different"] || row[col + "_onlyInDb1"]) {
+                  if (row[col + "_different"] ) {
                     return "row-db1-different";
-                  } else {
+                  }else if(row[col]===""){
+                    return "null-cell"
+                  }
+                   else {
                     return "row-db1-not-different";
                   }
                 } else if (col.endsWith("_db2")) {
-                  if (row[col + "_different"] || row[col + "_onlyInDb2"]) {
+                  if (row[col + "_different"]) {
                     return "row-db2-different";
-                  } else {
+                  } else if(row[col]===""){
+                    return "null-cell"
+                  }else {
                     return "row-db2-not-different";
                   }
                 }
@@ -156,9 +146,11 @@ export default function CompareDataGrid({
           <div>
             Rows per page:{" "}
             <select value={pageSize} onChange={handlePageSizeChange}>
-              <option value={10}>10</option>
-              <option value={25}>25</option>
               <option value={50}>50</option>
+              <option value={100}>100</option>
+              <option value={500}>500</option>
+              <option value={1000}>1000</option>
+              <option value={5000}>5000</option>
             </select>
           </div>
           <Pagination

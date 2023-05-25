@@ -1,5 +1,5 @@
 import {
-  GridOff,
+  RotateLeftSharp,
   Save,
   TableRows
 } from "@mui/icons-material";
@@ -10,11 +10,6 @@ import React from "react";
 export default function GridTopBar({
   filter,
   setFilter,
-  onExport,
-  onOpenConfig,
-  onExcelExport,
-  resetFilterSortConfig,
-  isDBData,
   apiRef
 }) {
 
@@ -23,6 +18,12 @@ export default function GridTopBar({
     const gridApi = apiRef.current;
     gridApi.exportDataAsCsv({ delimiter: ";", utf8WithBom: true });
   };
+  const handleReset= () => {
+    // const gridApi = apiRef.current;
+    // gridApi.reset({ delimiter: ";", utf8WithBom: true })
+    // apiRef.current.state({ delimiter: ";", utf8WithBom: true })
+  };
+
   return (
     <div className="bg-success mt-3">
       <div className="d-flex ">
@@ -42,13 +43,13 @@ export default function GridTopBar({
               />
             </IconButton>
           </Tooltip> */}
-          <Tooltip title=" Not Matched ">
+          {/* <Tooltip title=" Not Matched ">
             <IconButton onClick={() => setFilter("different")}>
               <GridOff
                 sx={{ color: filter === "different" ? "yellow" : "white" }}
               />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
           {/* <Tooltip title="Only in Data 2">
             <IconButton onClick={() => setFilter("_onlyInDb2")}>
               <JoinRight
@@ -63,16 +64,13 @@ export default function GridTopBar({
                   <Save sx={{ color: "white" }} />
                 </IconButton>
         </Tooltip>
-        {/* <CustomToolbar/> */}
-        {/* <Tooltip title="Reset Grid"> */}
-           {/* <CustomToolbar/> */}
-          {/* </Tooltip> */}
-          {/* <Tooltip title="Reset Grid">
-            <IconButton onClick={resetFilterSortConfig}>
+        
+          <Tooltip title="Reset Grid">
+            <IconButton onClick={handleReset}>
               <RotateLeftSharp sx={{ color: "white" }} />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Grid Configurations">
+         {/*  <Tooltip title="Grid Configurations">
             <IconButton onClick={() => onOpenConfig()}>
               <Settings sx={{ color: "white" }} />
             </IconButton>
