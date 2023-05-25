@@ -1,5 +1,5 @@
 import {
-  RotateLeftSharp,
+  GridOff,
   Save,
   TableRows
 } from "@mui/icons-material";
@@ -43,13 +43,13 @@ export default function GridTopBar({
               />
             </IconButton>
           </Tooltip> */}
-          {/* <Tooltip title=" Not Matched ">
+          <Tooltip title=" Not Matched ">
             <IconButton onClick={() => setFilter("different")}>
               <GridOff
                 sx={{ color: filter === "different" ? "yellow" : "white" }}
               />
             </IconButton>
-          </Tooltip> */}
+          </Tooltip>
           {/* <Tooltip title="Only in Data 2">
             <IconButton onClick={() => setFilter("_onlyInDb2")}>
               <JoinRight
@@ -65,11 +65,11 @@ export default function GridTopBar({
                 </IconButton>
         </Tooltip>
         
-          <Tooltip title="Reset Grid">
+          {/* <Tooltip title="Reset Grid">
             <IconButton onClick={handleReset}>
               <RotateLeftSharp sx={{ color: "white" }} />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
          {/*  <Tooltip title="Grid Configurations">
             <IconButton onClick={() => onOpenConfig()}>
               <Settings sx={{ color: "white" }} />
