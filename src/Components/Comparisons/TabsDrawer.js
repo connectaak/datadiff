@@ -36,10 +36,11 @@ export default function TabsDrawer({
               key={i}
               onClick={() => openTab(item.id)}
               sx={{
-                background:"#2684FF",
+                background:"#1976D2",
+                // background:"#2684FF",
                 color:"white",
                 my: "5px",
-                "&:hover": { background: "#2684FF" },
+                "&:hover": { background: "#1976D2" },
               }}
             >
               <ListItem

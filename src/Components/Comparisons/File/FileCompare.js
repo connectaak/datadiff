@@ -238,7 +238,7 @@ export default function FileCompare({ tabID }) {
                 />
 
                 <Button
-                   sx={{backgroundColor:"#2684FF"}}
+                   sx={{backgroundColor:"#1976d2"}}
                   variant="contained"
                   component="span"
                 >
@@ -288,7 +288,7 @@ export default function FileCompare({ tabID }) {
                   />
 
                   <Button
-                   sx={{backgroundColor:"#2684FF"}}
+                   sx={{backgroundColor:"#1976d2"}}
                     variant="contained"
                     component="span"
                   >
@@ -322,16 +322,16 @@ export default function FileCompare({ tabID }) {
               <IconButton
                 size="large"
                 sx={{
-                  background: "#198754",
+                  background: "#1976d2",
                   color: "white",
                   "&:hover": {
                     md: {
                       backgroundColor: "#f7f3f3",
-                      color: "#198754",
+                      color: "#1976d2",
                     },
                     xs: {
                       backgroundColor: "#198754",
-                      color: "#f7f3f3",
+                      color: "#1976d2",
                     },
                   },
                 }}
@@ -341,10 +341,10 @@ export default function FileCompare({ tabID }) {
                   sx={{
                     "&:hover": {
                       md: {
-                        color: "#198754",
+                        color: "#1976d2",
                       },
                       xs: {
-                        color: "#f7f3f3",
+                        color: "#1976d2",
                       },
                     },
                   }}
