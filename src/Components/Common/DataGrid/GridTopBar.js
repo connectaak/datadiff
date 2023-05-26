@@ -1,21 +1,36 @@
 import {
   GridOff,
+  Save,
   TableRows
 } from "@mui/icons-material";
-import { IconButton, Tooltip } from "@mui/material";
-import React from "react";
-
+import { Box, IconButton, InputAdornment, TextField, Tooltip } from "@mui/material";
+import React, { useState } from "react";
+// import CustomToolbar from "../CustomToolbar";
+import SearchIcon from '@mui/icons-material/Search';
 export default function GridTopBar({
   filter,
   setFilter,
-  onExport,
-  onOpenConfig,
-  onExcelExport,
-  resetFilterSortConfig,
-  isDBData,
+  apiRef
 }) {
+  const [filterValue,setFilterValue]=useState("")
+
+  const handleQuickFilterChange = (event) => {
+    const value = event.target.value;
+    apiRef.current.setQuickFilterValues(value);
+    setFilterValue(value)
+  };
+  const handleExport= () => {
+    const gridApi = apiRef.current;
+    gridApi.exportDataAsCsv({ delimiter: ";", utf8WithBom: true });
+  };
+  const handleReset= () => {
+    // const gridApi = apiRef.current;
+    // gridApi.reset({ delimiter: ";", utf8WithBom: true })
+    // apiRef.current.state({ delimiter: ";", utf8WithBom: true })
+  };
+
   return (
-    <div className="bg-success mt-3">
+    <Box sx={{background:"#1976d2"}} className=" mt-3">
       <div className="d-flex ">
         <div style={{ display: "flex", gap: "0.5rem", flex: "1" }}>
           <Tooltip title=" All Rows">
@@ -26,13 +41,7 @@ export default function GridTopBar({
               <TableRows sx={{ color: filter === "all" ? "yellow" : "white" }} />
             </IconButton>
           </Tooltip>{" "}
-          {/* <Tooltip title="Only in Data 1">
-            <IconButton onClick={() => setFilter("_onlyInDb1")}>
-              <JoinLeft
-                sx={{ color: filter === "_onlyInDb1" ? "yellow" : "white" }}
-              />
-            </IconButton>
-          </Tooltip> */}
+         
           <Tooltip title=" Not Matched ">
             <IconButton onClick={() => setFilter("different")}>
               <GridOff
@@ -40,21 +49,39 @@ export default function GridTopBar({
               />
             </IconButton>
           </Tooltip>
-          {/* <Tooltip title="Only in Data 2">
-            <IconButton onClick={() => setFilter("_onlyInDb2")}>
-              <JoinRight
-                sx={{ color: filter === "_onlyInDb2" ? "yellow" : "white" }}
-              />
-            </IconButton>
-          </Tooltip> */}
+         
         </div>
-        {/* <div className="d-flex align-items-center">
-          <Tooltip title="Reset Grid">
-            <IconButton onClick={resetFilterSortConfig}>
+        <div className="d-flex align-items-center">
+        <Tooltip title="Export in Excel">
+                <IconButton  onClick={handleExport}>
+                  <Save sx={{ color: "white" }} />
+                </IconButton>
+        </Tooltip>
+        <Box sx={{padding:"5px"}}>
+        <TextField
+        sx={{background:"white",margin:"0 5px", borderRadius:"5px"}}
+        id="outlined-basic" 
+        value={filterValue}
+        type="search" 
+        onChange={handleQuickFilterChange}
+        variant="outlined"
+        size="small"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          ),
+        }}
+        />
+        
+        </Box>
+          {/* <Tooltip title="Reset Grid">
+            <IconButton onClick={handleReset}>
               <RotateLeftSharp sx={{ color: "white" }} />
             </IconButton>
-          </Tooltip>
-          <Tooltip title="Grid Configurations">
+          </Tooltip> */}
+         {/*  <Tooltip title="Grid Configurations">
             <IconButton onClick={() => onOpenConfig()}>
               <Settings sx={{ color: "white" }} />
             </IconButton>
@@ -70,9 +97,9 @@ export default function GridTopBar({
             <IconButton onClick={() => onExport()}>
               <FileDownload sx={{ color: "white" }} />
             </IconButton>
-          </Tooltip>
-        </div> */}
+          </Tooltip> */}
+        </div>
       </div>
-    </div>
+    </Box>
   );
 }

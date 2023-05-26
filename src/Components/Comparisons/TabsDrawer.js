@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import { Button, IconButton, ListItemButton, Typography } from "@mui/material";
 import { Add, Close } from "@mui/icons-material";
+import { Button, IconButton, ListItemButton, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import React from "react";
 
 export default function TabsDrawer({
   handleTabsDrawerToggle,
@@ -36,10 +36,11 @@ export default function TabsDrawer({
               key={i}
               onClick={() => openTab(item.id)}
               sx={{
-                background:
-                  tabID === item?.id ? "blanchedalmond" : "rgb(189 255 209)",
+                background:"#1976D2",
+                // background:"#2684FF",
+                color:"white",
                 my: "5px",
-                "&:hover": { background: "blanchedalmond" },
+                "&:hover": { background: "#1976D2" },
               }}
             >
               <ListItem
@@ -49,7 +50,7 @@ export default function TabsDrawer({
                     aria-label="delete"
                     onClick={() => onDelete(item.id)}
                   >
-                    <Close />
+                    <Close sx={{color:"white"}} />
                   </IconButton>
                 }
               >

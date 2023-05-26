@@ -208,22 +208,22 @@ export default function FileCompare({ tabID }) {
     <div>
       <Grid container display={"flex"} flexWrap="wrap">
         <Grid md={6} xs={12} item>
-          <Box sx={{background:draggingL&&"gray",width:'400px',height:"400px"}} padding={"10px"} display="flex" alignItems={"center"} justifyContent={"center"}
+          <Box sx={{background:draggingL&&"gray",width:'400px',height:"150px",border:"2px solid gray", borderStyle:"dashed", borderRadius:"10px" }} padding={"10px"} display="flex" alignItems={"center"} justifyContent={"center"}
                 onDragEnter={(e)=>handleDragEnter(e,"left")}
                 onDragLeave={(e)=>handleDragLeave(e,"left")}
                 onDragOver={handleDragOver}
                 onDrop={(e)=>handleDrop(e,"left")}
           
           >
-            <Box>
+            <Box display="flex" alignItems="center">
             {uploadingL ? (
         <Box>
-          <Typography align={"center"}>Uploaded The First File</Typography>
+          <Typography align={"center"}>Uploaded The First File  &nbsp;</Typography>
         </Box>
       ) : (
         <>
-           <Typography align={"center"}>Drag and drop the first file here</Typography>
-           <Typography align={"center"}>Or</Typography>
+           <Typography align={"center"}>Upload your first file here Or  &nbsp;</Typography>
+          
         </>
      
       )}
@@ -238,11 +238,11 @@ export default function FileCompare({ tabID }) {
                 />
 
                 <Button
-                  className="bg-dark"
+                   sx={{backgroundColor:"#1976d2"}}
                   variant="contained"
                   component="span"
                 >
-                  <FileUpload /> Upload First .CSV File
+                  <FileUpload /> Browser
                 </Button>
               </label>
             </Box>
@@ -260,21 +260,21 @@ export default function FileCompare({ tabID }) {
         </Grid>{" "}
         <Grid md={6} xs={12} item display={"flex"} justifyContent="end">
           <Box>
-            <Box sx={{background:draggingR&&"gray",width:'400px',height:"400px"}} padding={"10px"} display="flex" alignItems={"center"} justifyContent={"center"}
+            <Box sx={{background:draggingL&&"gray",width:'400px',height:"150px",border:"2px solid gray", borderStyle:"dashed", borderRadius:"10px" }} padding={"10px"} display="flex" alignItems={"center"} justifyContent={"center"}
               onDragOver={handleDragOver}
               onDragEnter={(e)=>handleDragEnter(e,"right")}
                 onDragLeave={(e)=>handleDragLeave(e,"right")}
                 
                 onDrop={(e)=>handleDrop(e,"right")}>
-              <Box>
+              <Box display="flex" alignItems="center">
               {uploadingR ? (
         <Box>
-          <Typography align={"center"}>Uploaded The Second File</Typography>
+          <Typography align={"center"}>Uploaded The Second File  &nbsp; </Typography>
         </Box>
       ) : (
         <>
-           <Typography align={"center"}>Drag and drop the first file here</Typography>
-           <Typography align={"center"}>Or</Typography>
+           <Typography align={"center"}>Upload you second file here Or  &nbsp;</Typography>
+           
         </>
      
       )}
@@ -288,11 +288,11 @@ export default function FileCompare({ tabID }) {
                   />
 
                   <Button
-                    className="bg-dark"
+                   sx={{backgroundColor:"#1976d2"}}
                     variant="contained"
                     component="span"
                   >
-                    <FileUpload /> Upload Second .CSV File
+                    <FileUpload /> Browser
                   </Button>
                 </label>
               </Box>
@@ -322,16 +322,16 @@ export default function FileCompare({ tabID }) {
               <IconButton
                 size="large"
                 sx={{
-                  background: "#198754",
+                  background: "#1976d2",
                   color: "white",
                   "&:hover": {
                     md: {
                       backgroundColor: "#f7f3f3",
-                      color: "#198754",
+                      color: "#1976d2",
                     },
                     xs: {
                       backgroundColor: "#198754",
-                      color: "#f7f3f3",
+                      color: "#1976d2",
                     },
                   },
                 }}
@@ -341,10 +341,10 @@ export default function FileCompare({ tabID }) {
                   sx={{
                     "&:hover": {
                       md: {
-                        color: "#198754",
+                        color: "#1976d2",
                       },
                       xs: {
-                        color: "#f7f3f3",
+                        color: "#1976d2",
                       },
                     },
                   }}

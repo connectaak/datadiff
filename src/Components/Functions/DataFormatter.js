@@ -20,7 +20,7 @@ export const DataFormatter = (data, dataTypes) => {
           title: col?.columnName,
           field: col?.columnName,
           type: dataTypes[col?.dataType] || "text",
-          sortable: false,
+          sortable: true,
           minWidth:120
       }
       ];
@@ -33,14 +33,14 @@ allCols.unshift({
   title:"status",
 field:"status",
  type:"text",
-  sortable: false, 
+  sortable: true, 
   minWidth:120
 })
 allCols.unshift({
   title:"id",
 field:"id",
  type:"numeric",
-  sortable: false, 
+  sortable: true, 
 })
 return{data,
   allCols}
