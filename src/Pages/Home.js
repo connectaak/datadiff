@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import TabsDrawer from "../Components/Comparisons/TabsDrawer";
 import Layout from "../Components/Layout/Layout";
+import './../App.css';
 import Comparison from "./Comparison";
-
 export default function Home() {
   const [comparisonType, setComparisonType] = useState("file");
   const [tabs, setTabs] = useState([
@@ -60,7 +60,7 @@ export default function Home() {
   }, []);
 
   return (
-    <>
+    <div className="App">
       <Layout
         setComparisonType={setComparisonType}
         tabs={tabs}
@@ -85,6 +85,6 @@ export default function Home() {
           </Grid>
         </Grid>
       </Layout>
-    </>
+    </div>
   );
 }
