@@ -1,16 +1,17 @@
 {
-  "short_name": "DiffX",
+  "manifest_version": 3,
   "name": "DiffX",
+  "version": "1.0.0",
   "icons": {
     "16": "favicon.ico",
     "48": "logo192.png",
     "128": "logo512.png"
   },
-  "permissions": ["activeTab"],
-  "manifest_version": 2,
-  "version": "1.0.0",
-  "browser_action": {
-    "default_popup": "index.html",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["tabs"],
+  "action": {
     "default_title": "DiffX"
   }
 }
