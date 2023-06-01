@@ -9,7 +9,7 @@ import { DataFilter } from "../../Functions/DataFilter";
 import { DataFormatter } from "../../Functions/DataFormatter";
 import { RowFormatter } from "../../Functions/RowFormatter";
 
-export default function FileCompare({ tabID }) {
+export default function FileCompare({ tabID, tabData,setTabData }) {
   const [rowsL, setRowsL] = useState([]);
   const [rowsR, setRowsR] = useState([]);
   const [customData, setCustomData] = useState([]);
@@ -114,17 +114,43 @@ export default function FileCompare({ tabID }) {
   };
   reader.readAsText(inputFile);
   };
-  useEffect(() => {
-    setColumns([]);
-    setCustomData([]);
-    setRowsL([]);
-    setRowsR([]);
-    setNameL(false);
-    setNameR(false);
-    setUploadingL(false);
-    setUploadingR(false);
-  }, [tabID]);
 
+
+  
+  useEffect(() => {
+    const data={
+    id:tabID,
+    columns,
+    customData,
+    rowsL,
+    rowsR,
+    nameL,
+    nameR,
+    uploadingL,
+    uploadingR,
+    }
+    const currentData=tabData.find(item=>item.id===tabID)
+   if(currentData){
+    Object.assign(currentData, data);
+   }else{
+    setTabData([...tabData,data])
+   }
+  }, [customData, rowsL, rowsR, nameL, nameR, uploadingL, uploadingR, columns]);
+  
+
+  useEffect(() => {
+   const tabItem= tabData?.find(item=>item.id===tabID)
+   console.log(tabData,'tabdddd')
+   console.log(tabItem,"TabITemmm")
+    setColumns(tabItem?.columns?tabItem.columns:[]);
+    setCustomData(tabItem?.customData?tabItem.customData:[]);
+    setRowsL(tabItem?.rowsL?tabItem.rowsL:[]);
+    setRowsR(tabItem?.rowsR?tabItem.rowsR:[]);
+    setNameL(tabItem?.nameL?tabItem.nameL:false);
+    setNameR(tabItem?.nameR?tabItem.nameR:false);
+    setUploadingL(tabItem?.uploadingL?tabItem.uploadingL:false);
+    setUploadingR(tabItem?.uploadingR?tabItem.uploadingR:false);
+  }, [ tabID]);
   const handleFileChange = (e) => {
     if (e.target.files.length) {
       const name = e.target.name;
@@ -206,9 +232,9 @@ export default function FileCompare({ tabID }) {
 
   return (
     <div>
-      <Box display="flex"  justifyContent="space-between" alignItems="center">
+      <Box display="flex"  justifyContent="space-around" alignItems="center">
           <Box>
-          <Box sx={{background:draggingL&&"gray",width:{xs:'300px',sm:"300px",md:"400px"},height:"150px",border:"2px solid gray", borderStyle:"dashed", borderRadius:"10px" }} padding={"10px"} display="flex" alignItems={"center"} justifyContent={"center"}
+          <Box sx={{background:draggingL&&"gray",width:{xs:'300px',sm:"300px",md:"450px"},height:"150px",border:"2px solid gray", borderStyle:"dashed", borderRadius:"10px" }} padding={"10px"} display="flex" alignItems={"center"} justifyContent={"center"}
                 onDragEnter={(e)=>handleDragEnter(e,"left")}
                 onDragLeave={(e)=>handleDragLeave(e,"left")}
                 onDragOver={handleDragOver}
@@ -297,7 +323,7 @@ export default function FileCompare({ tabID }) {
         {/* second file upload */}
 
          <Box>
-            <Box sx={{background:draggingL&&"gray",width:{xs:'300px',sm:"300px",md:"400px"},height:"150px",border:"2px solid gray", borderStyle:"dashed", borderRadius:"10px" }} padding={"10px"} display="flex" alignItems={"center"} justifyContent={"center"}
+            <Box sx={{background:draggingR&&"gray",width:{xs:'300px',sm:"300px",md:"450px"},height:"150px",border:"2px solid gray", borderStyle:"dashed", borderRadius:"10px" }} padding={"10px"} display="flex" alignItems={"center"} justifyContent={"center"}
               onDragOver={handleDragOver}
               onDragEnter={(e)=>handleDragEnter(e,"right")}
                 onDragLeave={(e)=>handleDragLeave(e,"right")}
