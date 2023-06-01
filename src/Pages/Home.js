@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import TabsDrawer from "../Components/Comparisons/TabsDrawer";
 import Layout from "../Components/Layout/Layout";
+import './../App.css';
 import Comparison from "./Comparison";
-
 export default function Home() {
   const [comparisonType, setComparisonType] = useState("file");
   const [tabs, setTabs] = useState([
@@ -14,6 +14,8 @@ export default function Home() {
     },
   ]);
   const [currentTab, setCurrentTab] = useState(1);
+  const [tabData,setTabData]=useState([]);
+  console.log(tabData,"tabData")
   let handleOpenTab = (id) => setCurrentTab(id);
   let handleNewTab = () => {
     setTabs([
@@ -38,10 +40,12 @@ export default function Home() {
     }).then((result) => {
       if (result.isConfirmed) {
         setTabs(tabs.filter((tab) => tab.id !== id));
+        setTabData(pevData=>pevData.filter((tab)=>tab.id!==id))
         if (id === currentTab) setCurrentTab(null);
       }
     });
   };
+  console.log(tabs,"tabs")
   let handleTabNameChange = (e, item) => {
     let tabsCopy = [...tabs];
     let index = tabs.findIndex((tab) => tab.id === item.id);
@@ -60,7 +64,7 @@ export default function Home() {
   }, []);
 
   return (
-    <>
+    <div className="App">
       <Layout
         setComparisonType={setComparisonType}
         tabs={tabs}
@@ -80,11 +84,11 @@ export default function Home() {
           </Grid>
           <Grid item lg={10} xs={12}>
             {currentTab !== null && (
-              <Comparison tabID={currentTab} comparisonType={comparisonType} />
+              <Comparison tabID={currentTab} tabData={tabData} setTabData={setTabData} comparisonType={comparisonType} />
             )}
           </Grid>
         </Grid>
       </Layout>
-    </>
+    </div>
   );
 }

@@ -3,10 +3,11 @@ import {
   Save,
   TableRows
 } from "@mui/icons-material";
+import SearchIcon from '@mui/icons-material/Search';
 import { Box, IconButton, InputAdornment, TextField, Tooltip } from "@mui/material";
 import React, { useState } from "react";
-// import CustomToolbar from "../CustomToolbar";
-import SearchIcon from '@mui/icons-material/Search';
+import * as XLSX from 'xlsx';
+
 export default function GridTopBar({
   filter,
   setFilter,
@@ -19,16 +20,38 @@ export default function GridTopBar({
     apiRef.current.setQuickFilterValues(value);
     setFilterValue(value)
   };
-  const handleExport= () => {
-    const gridApi = apiRef.current;
-    gridApi.exportDataAsCsv({ delimiter: ";", utf8WithBom: true });
+  const handleExportCsv= () => {
+    if (apiRef && apiRef.current) {
+      apiRef.current.exportDataAsCsv(); 
+     }
   };
-  const handleReset= () => {
+  const convertCSVtoExcel = (csvData) => {
+    const csvArray = csvData.split('\n').map(row => row.split(','));
+    const worksheet = XLSX.utils.aoa_to_sheet(csvArray);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+    XLSX.writeFile(workbook, 'converted_excel_file.xlsx');
+  };
+  
+  const handleExportExcel= () => {
+    if (apiRef && apiRef.current) {
+     
+const csvData=apiRef.current.getDataAsCsv();
+console.log(csvData,"csv Data")
+if(csvData){
+convertCSVtoExcel(csvData);
+}
+} 
+  };
+  // const handleReset= () => {
     // const gridApi = apiRef.current;
     // gridApi.reset({ delimiter: ";", utf8WithBom: true })
     // apiRef.current.state({ delimiter: ";", utf8WithBom: true })
-  };
+  // };
 
+
+
+  
   return (
     <Box sx={{background:"#1976d2"}} className=" mt-3">
       <div className="d-flex ">
@@ -52,8 +75,13 @@ export default function GridTopBar({
          
         </div>
         <div className="d-flex align-items-center">
+        <Tooltip title="Export in CSV">
+                <IconButton  onClick={handleExportCsv}>
+                  <Save sx={{ color: "white" }} />
+                </IconButton>
+        </Tooltip>
         <Tooltip title="Export in Excel">
-                <IconButton  onClick={handleExport}>
+                <IconButton  onClick={handleExportExcel}>
                   <Save sx={{ color: "white" }} />
                 </IconButton>
         </Tooltip>

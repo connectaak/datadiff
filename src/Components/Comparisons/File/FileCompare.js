@@ -9,7 +9,7 @@ import { DataFilter } from "../../Functions/DataFilter";
 import { DataFormatter } from "../../Functions/DataFormatter";
 import { RowFormatter } from "../../Functions/RowFormatter";
 
-export default function FileCompare({ tabID }) {
+export default function FileCompare({ tabID, tabData,setTabData }) {
   const [rowsL, setRowsL] = useState([]);
   const [rowsR, setRowsR] = useState([]);
   const [customData, setCustomData] = useState([]);
@@ -114,17 +114,43 @@ export default function FileCompare({ tabID }) {
   };
   reader.readAsText(inputFile);
   };
-  useEffect(() => {
-    setColumns([]);
-    setCustomData([]);
-    setRowsL([]);
-    setRowsR([]);
-    setNameL(false);
-    setNameR(false);
-    setUploadingL(false);
-    setUploadingR(false);
-  }, [tabID]);
 
+
+  
+  useEffect(() => {
+    const data={
+    id:tabID,
+    columns,
+    customData,
+    rowsL,
+    rowsR,
+    nameL,
+    nameR,
+    uploadingL,
+    uploadingR,
+    }
+    const currentData=tabData.find(item=>item.id===tabID)
+   if(currentData){
+    Object.assign(currentData, data);
+   }else{
+    setTabData([...tabData,data])
+   }
+  }, [customData, rowsL, rowsR, nameL, nameR, uploadingL, uploadingR, columns]);
+  
+
+  useEffect(() => {
+   const tabItem= tabData?.find(item=>item.id===tabID)
+   console.log(tabData,'tabdddd')
+   console.log(tabItem,"TabITemmm")
+    setColumns(tabItem?.columns?tabItem.columns:[]);
+    setCustomData(tabItem?.customData?tabItem.customData:[]);
+    setRowsL(tabItem?.rowsL?tabItem.rowsL:[]);
+    setRowsR(tabItem?.rowsR?tabItem.rowsR:[]);
+    setNameL(tabItem?.nameL?tabItem.nameL:false);
+    setNameR(tabItem?.nameR?tabItem.nameR:false);
+    setUploadingL(tabItem?.uploadingL?tabItem.uploadingL:false);
+    setUploadingR(tabItem?.uploadingR?tabItem.uploadingR:false);
+  }, [ tabID]);
   const handleFileChange = (e) => {
     if (e.target.files.length) {
       const name = e.target.name;
@@ -206,9 +232,9 @@ export default function FileCompare({ tabID }) {
 
   return (
     <div>
-      <Grid container display={"flex"} flexWrap="wrap">
-        <Grid md={6} xs={12} item>
-          <Box sx={{background:draggingL&&"gray",width:'400px',height:"150px",border:"2px solid gray", borderStyle:"dashed", borderRadius:"10px" }} padding={"10px"} display="flex" alignItems={"center"} justifyContent={"center"}
+      <Box display="flex"  justifyContent="space-around" alignItems="center">
+          <Box>
+          <Box sx={{background:draggingL&&"gray",width:{xs:'300px',sm:"300px",md:"450px"},height:"150px",border:"2px solid gray", borderStyle:"dashed", borderRadius:"10px" }} padding={"10px"} display="flex" alignItems={"center"} justifyContent={"center"}
                 onDragEnter={(e)=>handleDragEnter(e,"left")}
                 onDragLeave={(e)=>handleDragLeave(e,"left")}
                 onDragOver={handleDragOver}
@@ -218,11 +244,11 @@ export default function FileCompare({ tabID }) {
             <Box display="flex" alignItems="center">
             {uploadingL ? (
         <Box>
-          <Typography align={"center"}>Uploaded The First File  &nbsp;</Typography>
+          <Typography variant="body2" align={"center"}>Uploaded The First File  &nbsp;</Typography>
         </Box>
       ) : (
         <>
-           <Typography align={"center"}>Upload your first file here Or  &nbsp;</Typography>
+           <Typography variant="body2" align={"center"}>Upload your first file Or  &nbsp;</Typography>
           
         </>
      
@@ -248,19 +274,56 @@ export default function FileCompare({ tabID }) {
             </Box>
           </Box>
           {uploadingL && (
-            <Box mx={"5px"} display={"flex"} alignItems={"end"}>
+            <Box mx={"5px"} display={"flex"} alignItems={"center"}>
               <Box>
                 <CheckCircle color="success" />
               </Box>
               <Box mx={"5px"}>
-                <Typography> {nameL} File Uploaded....!</Typography>
+                <Typography  variant="body2"> {nameL} File Uploaded....!</Typography>
               </Box>
             </Box>
           )}
-        </Grid>{" "}
-        <Grid md={6} xs={12} item display={"flex"} justifyContent="end">
-          <Box>
-            <Box sx={{background:draggingL&&"gray",width:'400px',height:"150px",border:"2px solid gray", borderStyle:"dashed", borderRadius:"10px" }} padding={"10px"} display="flex" alignItems={"center"} justifyContent={"center"}
+         </Box>
+        {/* play icon */}
+        
+              <IconButton
+                size="large"
+                sx={{
+                  background: "#1976d2",
+                  width:"fit-content",
+                  color: "white",
+                  "&:hover": {
+                    md: {
+                      backgroundColor: "#f7f3f3",
+                      color: "#1976d2",
+                    },
+                    xs: {
+                      backgroundColor: "#f7f3f3",
+                      color: "#1976d2",
+                    },
+                  },
+                }}
+                onClick={handleCompare}
+              >
+                <PlayArrow
+                  sx={{
+                    "&:hover": {
+                      md: {
+                        color: "#1976d2",
+                      },
+                      xs: {
+                        color: "#1976d2",
+                      },
+                    },
+                  }}
+                />
+              </IconButton>
+        
+
+        {/* second file upload */}
+
+         <Box>
+            <Box sx={{background:draggingR&&"gray",width:{xs:'300px',sm:"300px",md:"450px"},height:"150px",border:"2px solid gray", borderStyle:"dashed", borderRadius:"10px" }} padding={"10px"} display="flex" alignItems={"center"} justifyContent={"center"}
               onDragOver={handleDragOver}
               onDragEnter={(e)=>handleDragEnter(e,"right")}
                 onDragLeave={(e)=>handleDragLeave(e,"right")}
@@ -269,11 +332,11 @@ export default function FileCompare({ tabID }) {
               <Box display="flex" alignItems="center">
               {uploadingR ? (
         <Box>
-          <Typography align={"center"}>Uploaded The Second File  &nbsp; </Typography>
+          <Typography variant="body2" align={"center"}>Uploaded The Second File  &nbsp; </Typography>
         </Box>
       ) : (
         <>
-           <Typography align={"center"}>Upload you second file here Or  &nbsp;</Typography>
+           <Typography variant="body2" align={"center"}>Upload your second file Or  &nbsp;</Typography>
            
         </>
      
@@ -298,62 +361,21 @@ export default function FileCompare({ tabID }) {
               </Box>
             </Box>
             {uploadingR && (
-              <Box mx={"5px"} display={"flex"} alignItems={"end"}>
-                <Box>
-                  <CheckCircle color="success" />
-                </Box>
-                <Box mx={"5px"}>
-                  <Typography> {nameR} File Uploaded....!</Typography>
-                </Box>
+            <Box mx={"5px"} display={"flex"} alignItems={"center"}>
+              <Box>
+                <CheckCircle color="success" />
               </Box>
-            )}
-          </Box>
-        </Grid>
-        <Grid item xs={12} position="relative">
-          <Box display={"flex"} justifyContent="center">
-            <Box
-              sx={{
-                position: { md: "absolute" },
-                top: {
-                  md: "-35px",
-                },
-              }}
-            >
-              <IconButton
-                size="large"
-                sx={{
-                  background: "#1976d2",
-                  color: "white",
-                  "&:hover": {
-                    md: {
-                      backgroundColor: "#f7f3f3",
-                      color: "#1976d2",
-                    },
-                    xs: {
-                      backgroundColor: "#198754",
-                      color: "#1976d2",
-                    },
-                  },
-                }}
-                onClick={handleCompare}
-              >
-                <PlayArrow
-                  sx={{
-                    "&:hover": {
-                      md: {
-                        color: "#1976d2",
-                      },
-                      xs: {
-                        color: "#1976d2",
-                      },
-                    },
-                  }}
-                />
-              </IconButton>
+              <Box mx={"5px"}>
+                <Typography variant="body2"> {nameR} File Uploaded....!</Typography>
+              </Box>
             </Box>
-          </Box>
-        </Grid>
-        <Grid item xs={12} padding="20px">
+          )}
+     </Box>
+     
+       
+      </Box>
+  
+      <Grid item xs={12} padding="20px">
           <Box>
             {customData.length > 0 && (
               <>
@@ -363,13 +385,11 @@ export default function FileCompare({ tabID }) {
                   setFilter={setFilter}
                   filter={filter}
                   height="70vh"
-                  // onExcelExport={onExcelExport}
                 />
               </>
             )}
           </Box>
         </Grid>
-      </Grid>
     </div>
   );
 }
