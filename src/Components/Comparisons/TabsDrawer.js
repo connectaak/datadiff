@@ -7,23 +7,27 @@ import ListItem from "@mui/material/ListItem";
 import React from "react";
 
 export default function TabsDrawer({
-  handleTabsDrawerToggle,
   allTabs = [],
   setTabs,
   openTab,
   onDelete,
   onTabNameChange,
   tabID,
+  toggle
 }) {
+ 
   return (
-    <div>
+    <>
+       
+        {toggle&&
       <Box
-        onClick={handleTabsDrawerToggle}
         sx={{
+          width:"20%",
           textAlign: "center",
           height: "92vh",
           overflowY: "auto",
-          background: "#f4f4f4",
+          // background: "#f4f4f4",
+          display: { xs: "none", lg: "block" } 
         }}
       >
         <Typography variant="h6" sx={{ my: 2 }}>
@@ -65,7 +69,7 @@ export default function TabsDrawer({
             New Tab
           </Button>
         </Box>
-      </Box>
-    </div>
+      </Box>}
+    </>
   );
 }

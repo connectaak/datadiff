@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Box, Switch } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import TabsDrawer from "../Components/Comparisons/TabsDrawer";
@@ -15,7 +15,7 @@ export default function Home() {
   ]);
   const [currentTab, setCurrentTab] = useState(1);
   const [tabData,setTabData]=useState([]);
-  console.log(tabData,"tabData")
+  const [toggle,setToggle]=useState(true)
   let handleOpenTab = (id) => setCurrentTab(id);
   let handleNewTab = () => {
     setTabs([
@@ -45,7 +45,6 @@ export default function Home() {
       }
     });
   };
-  console.log(tabs,"tabs")
   let handleTabNameChange = (e, item) => {
     let tabsCopy = [...tabs];
     let index = tabs.findIndex((tab) => tab.id === item.id);
@@ -71,8 +70,12 @@ export default function Home() {
         openTab={handleOpenTab}
         setTabs={handleNewTab}
       >
-        <Grid container spacing={1}>
-          <Grid item lg={2} sx={{ display: { xs: "none", lg: "block" } }}>
+          <Switch style={{position:"absolute", top:0}} checked={toggle}
+  onChange={()=>setToggle((prev)=>!prev)}
+ defaultChecked />
+        <Box sx={{display:"flex"}}>
+         {/* <Grid item lg={2} sx={{ display: { xs: "none", lg: "block" } }}> */}
+       
             <TabsDrawer
               allTabs={tabs}
               tabID={currentTab}
@@ -80,14 +83,15 @@ export default function Home() {
               setTabs={handleNewTab}
               onDelete={handleTabDelete}
               onTabNameChange={handleTabNameChange}
+              toggle={toggle}
             />
-          </Grid>
-          <Grid item lg={10} xs={12}>
+          {/* </Grid> */}
+          <Box sx={{width:toggle?"80%":"100%"}}>
             {currentTab !== null && (
               <Comparison tabID={currentTab} tabData={tabData} setTabData={setTabData} comparisonType={comparisonType} />
             )}
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Layout>
     </div>
   );

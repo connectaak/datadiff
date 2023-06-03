@@ -1,7 +1,7 @@
 import { CheckCircle, FileUpload, PlayArrow } from "@mui/icons-material";
-import { Box, Button, Grid, IconButton, Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import Papa from "papaparse";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import { Comparator } from "../../Common/Comparator";
 import CompareDataGrid2 from "../../Common/DataGrid/CompareDataGrid2";
@@ -10,14 +10,15 @@ import { DataFormatter } from "../../Functions/DataFormatter";
 import { RowFormatter } from "../../Functions/RowFormatter";
 
 export default function FileCompare({ tabID, tabData,setTabData }) {
+  const [inputVisible,setInputVisible]=useState(true);
   const [rowsL, setRowsL] = useState([]);
   const [rowsR, setRowsR] = useState([]);
   const [customData, setCustomData] = useState([]);
   const [columns, setColumns] = useState([]);
+  
 
-
-  const [nameL, setNameL] = useState(false);
-  const [nameR, setNameR] = useState(false);
+  const [nameL, setNameL] = useState("");
+  const [nameR, setNameR] = useState("");
 
   const [uploadingL, setUploadingL] = useState(false);
   const [uploadingR, setUploadingR] = useState(false);
@@ -29,7 +30,7 @@ export default function FileCompare({ tabID, tabData,setTabData }) {
   const [draggingL, setDraggingL] = useState(false);
   const [draggingR, setDraggingR] = useState(false);
  
-
+  const fileInputRef = useRef(null);
   const handleDragEnter = (e,name) => {
     e.preventDefault();
     e.stopPropagation(); 
@@ -114,43 +115,6 @@ export default function FileCompare({ tabID, tabData,setTabData }) {
   };
   reader.readAsText(inputFile);
   };
-
-
-  
-  useEffect(() => {
-    const data={
-    id:tabID,
-    columns,
-    customData,
-    rowsL,
-    rowsR,
-    nameL,
-    nameR,
-    uploadingL,
-    uploadingR,
-    }
-    const currentData=tabData.find(item=>item.id===tabID)
-   if(currentData){
-    Object.assign(currentData, data);
-   }else{
-    setTabData([...tabData,data])
-   }
-  }, [customData, rowsL, rowsR, nameL, nameR, uploadingL, uploadingR, columns]);
-  
-
-  useEffect(() => {
-   const tabItem= tabData?.find(item=>item.id===tabID)
-   console.log(tabData,'tabdddd')
-   console.log(tabItem,"TabITemmm")
-    setColumns(tabItem?.columns?tabItem.columns:[]);
-    setCustomData(tabItem?.customData?tabItem.customData:[]);
-    setRowsL(tabItem?.rowsL?tabItem.rowsL:[]);
-    setRowsR(tabItem?.rowsR?tabItem.rowsR:[]);
-    setNameL(tabItem?.nameL?tabItem.nameL:false);
-    setNameR(tabItem?.nameR?tabItem.nameR:false);
-    setUploadingL(tabItem?.uploadingL?tabItem.uploadingL:false);
-    setUploadingR(tabItem?.uploadingR?tabItem.uploadingR:false);
-  }, [ tabID]);
   const handleFileChange = (e) => {
     if (e.target.files.length) {
       const name = e.target.name;
@@ -164,6 +128,8 @@ export default function FileCompare({ tabID, tabData,setTabData }) {
         );
         return;
       }
+
+      
       const reader = new FileReader();
       reader.onload = async ({ target }) => {
         const csv = Papa.parse(target.result, { header: true });
@@ -204,7 +170,48 @@ export default function FileCompare({ tabID, tabData,setTabData }) {
       };
       reader.readAsText(inputFile);
     }
+    e.target.value = null;
   };
+
+ 
+  useEffect(() => {
+    const data={
+    id:tabID,
+    columns,
+    customData,
+    rowsL,
+    rowsR,
+    nameL,
+    nameR,
+    uploadingL,
+    uploadingR,
+    filter,
+    }
+
+    const currentData=tabData.find(item=>item.id===tabID)
+   if(currentData){
+    Object.assign(currentData, data);
+   }else{
+    setInputVisible(true)
+    setTabData([...tabData,data])
+   }
+  }, [customData, rowsL, rowsR, nameL, nameR, uploadingL, uploadingR, columns]);
+  
+
+  useEffect(() => {
+   const tabItem= tabData?.find(item=>item.id===tabID)
+    setColumns(tabItem?.columns?tabItem.columns:[]);
+    setCustomData(tabItem?.customData?tabItem.customData:[]);
+    setRowsL(tabItem?.rowsL?tabItem.rowsL:[]);
+    setRowsR(tabItem?.rowsR?tabItem.rowsR:[]);
+    setNameL(tabItem?.nameL?tabItem.nameL:"");
+    setNameR(tabItem?.nameR?tabItem.nameR:"");
+    setUploadingL(tabItem?.uploadingL?tabItem.uploadingL:false);
+    setUploadingR(tabItem?.uploadingR?tabItem.uploadingR:false);
+    setFilter(tabItem?.filter?tabItem.filter:"")
+  }, [ tabID]);
+  
+ 
   let dataTypes = { string: "text", number: "numeric" };
 
   const handleCompare = () => {
@@ -214,7 +221,7 @@ export default function FileCompare({ tabID, tabData,setTabData }) {
 
     setColumns(allCols)
     setCustomData(data)
-    
+    setInputVisible(false)
   };
 
  useEffect(()=>{
@@ -232,14 +239,13 @@ export default function FileCompare({ tabID, tabData,setTabData }) {
 
   return (
     <div>
-      <Box display="flex"  justifyContent="space-around" alignItems="center">
+     {inputVisible&& <Box display="flex"  justifyContent="space-around" alignItems="center">
           <Box>
           <Box sx={{background:draggingL&&"gray",width:{xs:'300px',sm:"300px",md:"450px"},height:"150px",border:"2px solid gray", borderStyle:"dashed", borderRadius:"10px" }} padding={"10px"} display="flex" alignItems={"center"} justifyContent={"center"}
                 onDragEnter={(e)=>handleDragEnter(e,"left")}
                 onDragLeave={(e)=>handleDragLeave(e,"left")}
                 onDragOver={handleDragOver}
                 onDrop={(e)=>handleDrop(e,"left")}
-          
           >
             <Box display="flex" alignItems="center">
             {uploadingL ? (
@@ -260,6 +266,7 @@ export default function FileCompare({ tabID, tabData,setTabData }) {
                   name="left"
                   id="upload-file1"
                   type="file"
+                  ref={fileInputRef}
                   onChange={handleFileChange}
                 />
 
@@ -373,10 +380,10 @@ export default function FileCompare({ tabID, tabData,setTabData }) {
      </Box>
      
        
-      </Box>
+      </Box>}
   
-      <Grid item xs={12} padding="20px">
-          <Box>
+      {/* <Grid item xs={12} padding="20px"> */}
+          <Box sx={{padding:"20px"}}>
             {customData.length > 0 && (
               <>
                 <CompareDataGrid2
@@ -389,7 +396,7 @@ export default function FileCompare({ tabID, tabData,setTabData }) {
               </>
             )}
           </Box>
-        </Grid>
+        {/* </Grid> */}
     </div>
   );
 }
