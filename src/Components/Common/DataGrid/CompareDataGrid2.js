@@ -56,16 +56,17 @@ export default function CompareDataGrid({
     page * pageSize
   );
 
-
 return (
-    <div style={{ height: 400, width: "100%", position: "relative" }}>
+    <Box style={{ position: "relative" }}>
       <GridTopBar
         filter={filter}
         setFilter={setFilter}
         apiRef={apiRef}
       />
-      {Object.keys(parsedData[0]).length === 1 ? (
-        <Typography align="center">There is no different data</Typography>
+      {Object.keys(parsedData[0]).length === 2 ? (
+       <Box sx={{margin:"10px"}}>
+         <Typography variant="h6" align="center">There is no different data</Typography>
+         </Box>
       ) : (
         <>
       
@@ -169,7 +170,7 @@ return (
         
         </>
       )}
-    </div>
+    </Box>
   );
 }
 

@@ -1,10 +1,9 @@
 import {
   GridOff,
-  Save,
   TableRows
 } from "@mui/icons-material";
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, IconButton, InputAdornment, TextField, Tooltip } from "@mui/material";
+import { Box, Button, IconButton, InputAdornment, TextField, Tooltip } from "@mui/material";
 import React, { useState } from "react";
 import * as XLSX from 'xlsx';
 
@@ -37,7 +36,6 @@ export default function GridTopBar({
     if (apiRef && apiRef.current) {
      
 const csvData=apiRef.current.getDataAsCsv();
-console.log(csvData,"csv Data")
 if(csvData){
 convertCSVtoExcel(csvData);
 }
@@ -76,14 +74,11 @@ convertCSVtoExcel(csvData);
         </div>
         <div className="d-flex align-items-center">
         <Tooltip title="Export in CSV">
-                <IconButton  onClick={handleExportCsv}>
-                  <Save sx={{ color: "white" }} />
-                </IconButton>
+        <Button sx={{color:"white", fontWeight:"bold"}} variant="text" onClick={handleExportCsv}>CSV</Button>
+               
         </Tooltip>
         <Tooltip title="Export in Excel">
-                <IconButton  onClick={handleExportExcel}>
-                  <Save sx={{ color: "white" }} />
-                </IconButton>
+        <Button sx={{color:"white", fontWeight:"bold"}} variant="text" onClick={handleExportExcel}>Excel</Button>
         </Tooltip>
         <Box sx={{padding:"5px"}}>
         <TextField
