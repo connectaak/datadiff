@@ -1,4 +1,4 @@
-import { Box, Switch } from "@mui/material";
+import { Box, Switch, Tooltip } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import TabsDrawer from "../Components/Comparisons/TabsDrawer";
@@ -70,11 +70,13 @@ export default function Home() {
         openTab={handleOpenTab}
         setTabs={handleNewTab}
       >
-          <Switch style={{position:"absolute", top:0}} checked={toggle}
+        <Tooltip title="Tab Toggle">
+        <Switch  style={{position:"absolute", top:0}} checked={toggle}
   onChange={()=>setToggle((prev)=>!prev)}
  defaultChecked />
+        </Tooltip>
+       
         <Box sx={{display:"flex"}}>
-         {/* <Grid item lg={2} sx={{ display: { xs: "none", lg: "block" } }}> */}
        
             <TabsDrawer
               allTabs={tabs}
@@ -85,7 +87,6 @@ export default function Home() {
               onTabNameChange={handleTabNameChange}
               toggle={toggle}
             />
-          {/* </Grid> */}
           <Box sx={{width:toggle?"80%":"100%"}}>
             {currentTab !== null && (
               <Comparison tabID={currentTab} tabData={tabData} setTabData={setTabData} comparisonType={comparisonType} />
